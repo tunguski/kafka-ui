@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.junit.Test;
-import pl.matsuo.core.util.desktop.ViewComponents;
+import pl.matsuo.core.util.desktop.component.ViewComponents;
 import pl.matsuo.tools.kafka.gui.model.KafkaAdminGuiModel;
 import pl.matsuo.tools.kafka.gui.model.KafkaInstanceModel;
 

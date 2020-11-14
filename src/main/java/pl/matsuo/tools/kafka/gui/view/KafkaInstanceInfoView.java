@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 import pl.matsuo.core.util.desktop.BootstrapIcons;
 import pl.matsuo.core.util.desktop.IRequest;
 import pl.matsuo.core.util.desktop.IView;
-import pl.matsuo.core.util.desktop.ViewComponents;
+import pl.matsuo.core.util.desktop.component.ViewComponents;
 import pl.matsuo.tools.kafka.gui.model.KafkaAdminGuiModel;
 
 @RequiredArgsConstructor

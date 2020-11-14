@@ -8,7 +8,9 @@ import pl.matsuo.core.util.desktop.DesktopUIData;
 import pl.matsuo.core.util.desktop.IActionController;
 import pl.matsuo.core.util.desktop.IRequest;
 import pl.matsuo.core.util.desktop.IView;
-import pl.matsuo.core.util.desktop.ViewComponents;
+import pl.matsuo.core.util.desktop.component.FormComponents;
+import pl.matsuo.core.util.desktop.component.ViewComponents;
+import pl.matsuo.tools.kafka.gui.action.ConnectToInstanceAction;
 import pl.matsuo.tools.kafka.gui.action.CreateInstanceAction;
 import pl.matsuo.tools.kafka.gui.model.KafkaAdminGuiModel;
 import pl.matsuo.tools.kafka.gui.view.KafkaInstanceInfoView;
@@ -34,8 +36,9 @@ public class KafkaAdminGui extends DesktopUI<KafkaAdminGuiModel> {
     Map<String, IView<IRequest, KafkaAdminGuiModel>> views = new HashMap<>();
 
     ViewComponents viewComponents = new ViewComponents();
+    FormComponents formComponents = new FormComponents();
 
-    views.put("/", new KafkaInstancesListView(viewComponents));
+    views.put("/", new KafkaInstancesListView(viewComponents, formComponents));
     views.put("/instance/info", new KafkaInstanceInfoView(viewComponents));
 
     return views;
@@ -45,6 +48,7 @@ public class KafkaAdminGui extends DesktopUI<KafkaAdminGuiModel> {
     Map<String, IActionController<IRequest, KafkaAdminGuiModel>> controllerMap = new HashMap<>();
 
     controllerMap.put("/instance/create", new CreateInstanceAction());
+    controllerMap.put("/instance/connect", new ConnectToInstanceAction());
 
     return controllerMap;
   }

@@ -10,7 +10,6 @@ import static j2html.TagCreator.h1;
 import static j2html.TagCreator.h2;
 import static j2html.TagCreator.i;
 import static j2html.TagCreator.input;
-import static j2html.TagCreator.label;
 import static j2html.TagCreator.li;
 import static j2html.TagCreator.span;
 import static j2html.TagCreator.text;
@@ -23,7 +22,8 @@ import lombok.extern.slf4j.Slf4j;
 import pl.matsuo.core.util.desktop.BootstrapIcons;
 import pl.matsuo.core.util.desktop.IRequest;
 import pl.matsuo.core.util.desktop.IView;
-import pl.matsuo.core.util.desktop.ViewComponents;
+import pl.matsuo.core.util.desktop.component.FormComponents;
+import pl.matsuo.core.util.desktop.component.ViewComponents;
 import pl.matsuo.tools.kafka.gui.model.KafkaAdminGuiModel;
 import pl.matsuo.tools.kafka.gui.model.KafkaInstanceModel;
 
@@ -33,6 +33,7 @@ public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiMode
 
   public static final String SHOW_ADD_FORM = "showAddForm";
   final ViewComponents viewComponents;
+  final FormComponents formComponents;
 
   @Override
   public ContainerTag view(IRequest request, KafkaAdminGuiModel model) {
@@ -74,16 +75,21 @@ public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiMode
   private ContainerTag createInstanceListItem(KafkaInstanceModel instance) {
     return li(
         attrs(".list-group-item.list-group-item-action"),
-        text(instance.getName()),
+        form(
+                attrs(".d-inline-block.m-0"),
+                input().withType("hidden").withName("name").withValue(instance.getName()),
+                button(attrs(".btn.btn-link.p-0.border-0.align-baseline"), text(instance.getName()))
+                    .withType("submit"))
+            .withAction("/instance/connect"),
         span(attrs(".text-muted.ml-3"), instance.getUrl()));
   }
 
   private DomContent newKafkaInstanceForm(IRequest request, KafkaAdminGuiModel model) {
     if (showAddForm(request, model)) {
       return form(
-              textField("Instance name", "name", request),
-              textField("Url", "url", request),
-              button(attrs(".btn.btn-primary"), text("Create")).withType("submit"))
+              formComponents.textField("Instance name", "name", request),
+              formComponents.textField("Url", "url", request),
+              formComponents.submitButton("Create"))
           .withAction("/instance/create");
     } else {
       return null;
@@ -92,17 +98,5 @@ public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiMode
 
   private boolean showAddForm(IRequest request, KafkaAdminGuiModel model) {
     return request.hasParam(SHOW_ADD_FORM) || model.getKnownInstances().isEmpty();
-  }
-
-  private ContainerTag textField(String s, String name, IRequest request) {
-    log.info(name + ": " + request.getParam(name));
-    return div(
-        attrs(".form-group"),
-        label(s).attr("for", "form-" + name),
-        input(attrs(".form-control"))
-            .withType("text")
-            .withName(name)
-            .withId("form-" + name)
-            .withCondValue(request.hasParam(name), request.getParam(name)));
   }
 }

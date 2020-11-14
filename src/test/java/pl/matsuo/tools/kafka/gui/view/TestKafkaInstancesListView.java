@@ -10,24 +10,26 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.kafka.clients.admin.TopicListing;
 import org.junit.Test;
-import pl.matsuo.core.util.desktop.ViewComponents;
+import pl.matsuo.core.util.desktop.component.FormComponents;
+import pl.matsuo.core.util.desktop.component.ViewComponents;
 import pl.matsuo.tools.kafka.gui.model.KafkaAdminGuiModel;
 import pl.matsuo.tools.kafka.gui.model.KafkaInstanceModel;
 
 public class TestKafkaInstancesListView {
 
+  ViewComponents viewComponents = new ViewComponents();
+  FormComponents formComponents = new FormComponents();
+
   @Test
   public void viewNoForm() {
-    ViewComponents viewComponents = new ViewComponents();
-    KafkaInstancesListView view = new KafkaInstancesListView(viewComponents);
+    KafkaInstancesListView view = new KafkaInstancesListView(viewComponents, formComponents);
 
     KafkaAdminGuiModel model = new KafkaAdminGuiModel();
 
     Map<String, TopicListing> topicListingMap = new HashMap<>();
     topicListingMap.put("topic", new TopicListing("topic", false));
     model.setTopicListingMap(topicListingMap);
-    model.setKafkaInstance(new KafkaInstanceModel());
-    model.getKafkaInstance().setUrl("localhost:9092");
+    model.setKafkaInstance(new KafkaInstanceModel("test", "localhost:9092"));
     model.getKnownInstances().add(model.getKafkaInstance());
 
     String rendered =
@@ -38,8 +40,7 @@ public class TestKafkaInstancesListView {
 
   @Test
   public void viewWithForm() {
-    ViewComponents viewComponents = new ViewComponents();
-    KafkaInstancesListView view = new KafkaInstancesListView(viewComponents);
+    KafkaInstancesListView view = new KafkaInstancesListView(viewComponents, formComponents);
 
     KafkaAdminGuiModel model = new KafkaAdminGuiModel();
 
