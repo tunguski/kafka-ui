@@ -28,7 +28,7 @@ public class TestKafkaInstancesListView {
 
     Map<String, TopicListing> topicListingMap = new HashMap<>();
     topicListingMap.put("topic", new TopicListing("topic", false));
-    model.setTopicListingMap(topicListingMap);
+    model.setTopics(topicListingMap);
     model.setKafkaInstance(new KafkaInstanceModel("test", "localhost:9092"));
     model.getKnownInstances().add(model.getKafkaInstance());
 
@@ -46,7 +46,7 @@ public class TestKafkaInstancesListView {
 
     Map<String, TopicListing> topicListingMap = new HashMap<>();
     topicListingMap.put("topic", new TopicListing("topic", false));
-    model.setTopicListingMap(topicListingMap);
+    model.setTopics(topicListingMap);
     model.setKafkaInstance(new KafkaInstanceModel("Localhost 9092", "localhost:9092", 7));
     model.getKnownInstances().add(model.getKafkaInstance());
     model.getKnownInstances().add(new KafkaInstanceModel("Very far", "ohio.com:9092", 12));

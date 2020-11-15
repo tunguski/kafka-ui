@@ -2,18 +2,17 @@ package pl.matsuo.tools.kafka.gui.view;
 
 import static j2html.TagCreator.a;
 import static j2html.TagCreator.attrs;
-import static j2html.TagCreator.button;
-import static j2html.TagCreator.div;
 import static j2html.TagCreator.each;
 import static j2html.TagCreator.form;
 import static j2html.TagCreator.h1;
 import static j2html.TagCreator.h2;
 import static j2html.TagCreator.i;
-import static j2html.TagCreator.input;
 import static j2html.TagCreator.li;
 import static j2html.TagCreator.span;
 import static j2html.TagCreator.text;
 import static j2html.TagCreator.ul;
+import static pl.matsuo.core.util.collection.Pair.pair;
+import static pl.matsuo.core.util.desktop.component.AlertType.danger;
 
 import j2html.tags.ContainerTag;
 import j2html.tags.DomContent;
@@ -32,6 +31,7 @@ import pl.matsuo.tools.kafka.gui.model.KafkaInstanceModel;
 public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiModel> {
 
   public static final String SHOW_ADD_FORM = "showAddForm";
+
   final ViewComponents viewComponents;
   final FormComponents formComponents;
 
@@ -47,18 +47,10 @@ public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiMode
                     ? a(attrs(".float-right"), BootstrapIcons.plus_circle.svg())
                         .withHref("/?" + SHOW_ADD_FORM)
                     : null),
-            maybeShowErrorMessage(request),
+            viewComponents.maybeShowAlert(request, "error_message", danger),
             newKafkaInstanceForm(request, model),
             showAddForm ? h2("Saved Kafka instances") : null,
             createInstancesList(model)));
-  }
-
-  private DomContent maybeShowErrorMessage(IRequest request) {
-    if (request.hasParam("error_message")) {
-      return div(attrs(".alert.alert-danger"), text(request.getParam("error_message")));
-    } else {
-      return null;
-    }
   }
 
   private ContainerTag createInstancesList(KafkaAdminGuiModel model) {
@@ -75,12 +67,8 @@ public class KafkaInstancesListView implements IView<IRequest, KafkaAdminGuiMode
   private ContainerTag createInstanceListItem(KafkaInstanceModel instance) {
     return li(
         attrs(".list-group-item.list-group-item-action"),
-        form(
-                attrs(".d-inline-block.m-0"),
-                input().withType("hidden").withName("name").withValue(instance.getName()),
-                button(attrs(".btn.btn-link.p-0.border-0.align-baseline"), text(instance.getName()))
-                    .withType("submit"))
-            .withAction("/instance/connect"),
+        formComponents.formAsLink(
+            instance.getName(), "/instance/connect", pair("name", instance.getName())),
         span(attrs(".text-muted.ml-3"), instance.getUrl()));
   }
 

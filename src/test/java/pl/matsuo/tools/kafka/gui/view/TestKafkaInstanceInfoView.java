@@ -23,9 +23,10 @@ public class TestKafkaInstanceInfoView {
 
     Map<String, TopicListing> topicListingMap = new HashMap<>();
     topicListingMap.put("topic", new TopicListing("topic", false));
-    model.setTopicListingMap(topicListingMap);
+    model.setTopics(topicListingMap);
     model.setKafkaInstance(new KafkaInstanceModel());
     model.getKafkaInstance().setUrl("localhost:9092");
+    model.setOffsetData(new HashMap<>());
     String rendered = view.view(request("/kafkaInstanceInfo", emptyMap()), model).renderFormatted();
 
     storeView("kafkaInstanceInfo.html", rendered);
